@@ -25,14 +25,16 @@ const AddTodoModal = () => {
 
   const [ addTodo, {data, isLoading, isError, isSuccess}] = useAddTodoMutation();
 
+  console.log({data, isLoading, isError, isSuccess});
+  
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const randomId = Math.random().toString(32).substring(2, 7);
-    console.log({ randomId, task, description, priority });
+    // const randomId = Math.random().toString(32).substring(2, 7);
+    console.log({ task, description, priority });
     const taskDetails = {
-      id: randomId,
       title: task,
       description,
+      isCompleted: false,
       priority,
     };
     // dispatch(addTodo(taskDetails));
