@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "../ui/button";
 import { removeTodo, toggleStatus } from "@/redux/features/todoSlice";
-import { useUpdateTodoMutation } from "@/redux/api/api";
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "@/redux/api/api";
 import UpdateTodoModal from "./UpdateTodoModal";
 
 export type TTodo = {
@@ -21,6 +21,8 @@ const TodoCard = ({
 }: TTodo) => {
   const dispatch = useAppDispatch();
   const [updateTodo, { data, isLoading }] = useUpdateTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
+
   const handleToggleStatus = () => {
     // dispatch(toggleStatus(id));
     const taskData = {
@@ -34,6 +36,7 @@ const TodoCard = ({
     };
     updateTodo(taskData);
   };
+
   return (
     <div className="bg-white flex justify-between items-center p-3 rounded-md border">
       <input
@@ -66,7 +69,7 @@ const TodoCard = ({
       </div>
       <p className="flex-[2]">{description}</p>
       <div className="space-x-5 ">
-        <Button onClick={() => dispatch(removeTodo(id))} className="bg-red-500">
+        <Button onClick={() => deleteTodo(_id)} className="bg-red-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
