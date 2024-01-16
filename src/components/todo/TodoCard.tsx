@@ -1,19 +1,38 @@
 import { useAppDispatch } from "@/redux/hooks";
 import { Button } from "../ui/button";
 import { removeTodo, toggleStatus } from "@/redux/features/todoSlice";
+import { useUpdateTodoMutation } from "@/redux/api/api";
+import UpdateTodoModal from "./UpdateTodoModal";
 
-type TTodo = {
-  id: string;
+export type TTodo = {
+  _id: string;
   title: string;
   description: string;
   priority: string;
   isCompleted?: boolean;
 };
 
-const TodoCard = ({ id, title, description, isCompleted, priority }: TTodo) => {
+const TodoCard = ({
+  _id,
+  title,
+  description,
+  isCompleted,
+  priority,
+}: TTodo) => {
   const dispatch = useAppDispatch();
+  const [updateTodo, { data, isLoading }] = useUpdateTodoMutation();
   const handleToggleStatus = () => {
-    dispatch(toggleStatus(id));
+    // dispatch(toggleStatus(id));
+    const taskData = {
+      id: _id,
+      data: {
+        title,
+        description,
+        priority,
+        isCompleted: !isCompleted,
+      },
+    };
+    updateTodo(taskData);
   };
   return (
     <div className="bg-white flex justify-between items-center p-3 rounded-md border">
@@ -27,13 +46,15 @@ const TodoCard = ({ id, title, description, isCompleted, priority }: TTodo) => {
       />
       <p className="flex-1 font-semibold">{title}</p>
       <div className="flex-1 flex items-center gap-2">
-        <div 
-        className={`size-3 rounded-full 
-          ${priority === 'high'? 'bg-red-500' : null}
-          ${priority === 'medium'? 'bg-yellow-500' : null}
-          ${priority === 'low'? 'bg-green-500' : null}
+        <div
+          className={`size-3 rounded-full 
+          ${priority === "high" ? "bg-red-500" : null}
+          ${priority === "medium" ? "bg-yellow-500" : null}
+          ${priority === "low" ? "bg-green-500" : null}
         `}
-        > </div>
+        >
+          {" "}
+        </div>
         <p>{priority}</p>
       </div>
       <div className="flex-1">
@@ -61,22 +82,13 @@ const TodoCard = ({ id, title, description, isCompleted, priority }: TTodo) => {
             />
           </svg>
         </Button>
-        <Button className="bg-[#5C53FE]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-            />
-          </svg>
-        </Button>
+        <UpdateTodoModal
+          _id={_id}
+          title={title}
+          description={description}
+          priority={priority}
+          isCompleted={isCompleted}
+        />
       </div>
     </div>
   );

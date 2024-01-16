@@ -26,10 +26,19 @@ export const baseApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['todo']
+            invalidatesTags: ['todo'],
         }),
+        updateTodo: builder.mutation({
+            query: (options) =>  ({
+                    url: `/task/${options.id}`,
+                    method: 'PUT',
+                    body: options.data
+                }),
+                invalidatesTags: ['todo'],
+            }
+        )
     })
 
 });
 
-export const { useGetTodosQuery, useAddTodoMutation } = baseApi;
+export const { useGetTodosQuery, useAddTodoMutation, useUpdateTodoMutation } = baseApi;
