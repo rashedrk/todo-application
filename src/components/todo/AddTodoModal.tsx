@@ -15,12 +15,15 @@ import { Label } from "../ui/label";
 import { useAppDispatch } from "@/redux/hooks";
 import { addTodo } from "@/redux/features/todoSlice";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useAddTodoMutation } from "@/redux/api/api";
 
 const AddTodoModal = () => {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
+
+  const [ addTodo, {data, isLoading, isError, isSuccess}] = useAddTodoMutation();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -32,7 +35,8 @@ const AddTodoModal = () => {
       description,
       priority,
     };
-    dispatch(addTodo(taskDetails));
+    // dispatch(addTodo(taskDetails));
+    addTodo(taskDetails)
   };
 
   return (
